@@ -90,6 +90,7 @@ func UpdateBookById(writer http.ResponseWriter, request *http.Request) {
 		writer.WriteHeader(http.StatusNotFound) // 404 error
 		message := models.Message{Message: fmt.Sprintf("book with id %v is not exists", id)}
 		json.NewEncoder(writer).Encode(message)
+		return
 	}
 
 	ok := models.UpdateBookById(id, userBook)
@@ -98,8 +99,35 @@ func UpdateBookById(writer http.ResponseWriter, request *http.Request) {
 		message := models.Message{Message: fmt.Sprintf("do nothing, no content to update book id %v", id)}
 		json.NewEncoder(writer).Encode(message)
 	} else {
-		updatedBook, _ := models.FindBookByID(id)
 		writer.WriteHeader(http.StatusOK) // 200 error
-		json.NewEncoder(writer).Encode(updatedBook)
+		message := models.Message{Message: fmt.Sprintf("book with id %v has updated", id)}
+		json.NewEncoder(writer).Encode(message)
 	}
+}
+
+func DeleteBookById(writer http.ResponseWriter, request *http.Request) {
+	initHeaders(writer)
+	id, err := strconv.Atoi(mux.Vars(request)["id"])
+	if err != nil {
+		log.Println("Error occurs while parsing id field:", err)
+		writer.WriteHeader(http.StatusBadRequest) // 400 error
+		message := models.Message{Message: "don't use ID parametr as uncasted to int."}
+		json.NewEncoder(writer).Encode(message)
+		return
+	}
+
+	_, ok := models.FindBookByID(id)
+
+	if !ok {
+		log.Println("book with id =", id, "not found.")
+		writer.WriteHeader(http.StatusNotFound) // 404 error
+		message := models.Message{Message: "book with that ID does not exist in database."}
+		json.NewEncoder(writer).Encode(message)
+		return
+	}
+
+	// Delete book
+	models.DeleteBookById(id)
+	message := models.Message{Message: "book has successfully deleted from database."}
+	json.NewEncoder(writer).Encode(message)
 }
