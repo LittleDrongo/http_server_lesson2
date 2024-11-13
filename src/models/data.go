@@ -83,7 +83,5 @@ func UpdateBookById(id int, book Book) (found bool) {
 		}
 
 	}
-
 	return found
-
 }
