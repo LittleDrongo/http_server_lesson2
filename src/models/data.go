@@ -69,27 +69,27 @@ func DeleteBookById(id int) (found bool) {
 func UpdateBookById(id int, book Book) (changed bool) {
 	for k, b := range DB {
 		if b.ID == id {
-			if len(book.Title) > 0 {
+			if len(book.Title) > 0 && book.Title != b.Title {
 				DB[k].Title = book.Title
 				changed = true
 			}
 
-			if len(book.Author.Name) > 0 {
+			if len(book.Author.Name) > 0 && book.Author.Name != b.Author.Name {
 				DB[k].Author.Name = book.Author.Name
 				changed = true
 			}
 
-			if len(book.Author.LastName) > 0 {
+			if len(book.Author.LastName) > 0 && book.Author.LastName != b.Author.LastName {
 				DB[k].Author.LastName = book.Author.LastName
 				changed = true
 			}
 
-			if book.Author.BornYear > 0 {
+			if book.Author.BornYear > 0 && book.Author.BornYear != b.Author.BornYear {
 				DB[k].Author.BornYear = book.Author.BornYear
 				changed = true
 			}
 
-			if book.YearPublished > 0 {
+			if book.YearPublished > 0 && book.YearPublished != b.YearPublished {
 				DB[k].YearPublished = book.YearPublished
 				changed = true
 			}

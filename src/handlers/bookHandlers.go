@@ -96,8 +96,7 @@ func UpdateBookById(writer http.ResponseWriter, request *http.Request) {
 	ok := models.UpdateBookById(id, userBook)
 	if !ok {
 		writer.WriteHeader(http.StatusNoContent) // 204 error
-		message := models.Message{Message: fmt.Sprintf("do nothing, no content to update book id %v", id)}
-		json.NewEncoder(writer).Encode(message)
+		return
 	} else {
 		writer.WriteHeader(http.StatusOK) // 200 error
 		message := models.Message{Message: fmt.Sprintf("book with id %v has updated", id)}
