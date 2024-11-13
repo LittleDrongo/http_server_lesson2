@@ -18,7 +18,8 @@ type Author struct {
 }
 
 func init() {
-	book := Book{
+
+	DB = append(DB, Book{
 		ID:            1,
 		Title:         "Lord of the Rings. Vol. 1",
 		YearPublished: 1978,
@@ -26,10 +27,17 @@ func init() {
 			Name:     "J.R.",
 			LastName: "Tolkin",
 			BornYear: 1892,
-		},
-	}
-
-	DB = append(DB, book)
+		}},
+		Book{
+			ID:            2,
+			Title:         "The Two Towers",
+			YearPublished: 1978,
+			Author: Author{
+				Name:     "J.R.",
+				LastName: "Tolkin",
+				BornYear: 1954,
+			}},
+	)
 
 }
 

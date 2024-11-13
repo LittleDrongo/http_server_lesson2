@@ -11,7 +11,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// GetBookById function returns book by id.
 func GetBookById(writer http.ResponseWriter, request *http.Request) {
+	initHeaders(writer)
 	id, err := strconv.Atoi(mux.Vars(request)["id"])
 	if err != nil {
 		log.Println("error occurs while parsing id field:", err)
@@ -31,5 +33,30 @@ func GetBookById(writer http.ResponseWriter, request *http.Request) {
 		writer.WriteHeader(http.StatusOK) // 200 error
 		json.NewEncoder(writer).Encode(book)
 	}
+}
+
+// CreateBook funtion create new book by id
+func CreateBook(writer http.ResponseWriter, request *http.Request) {
+	initHeaders(writer)
+	log.Println("Creating new book...")
+	var book models.Book
+
+	decoder := json.NewDecoder(request.Body)
+	decoder.DisallowUnknownFields() //! Отклоняет поля которые неизвестны.
+	err := decoder.Decode(&book)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest) // 400 error
+		message := models.Message{Message: "provide json file is invalid."}
+		json.NewEncoder(writer).Encode(message)
+		return
+	}
+
+	// Create new book and save one
+	var newBookId int = len(models.DB) + 1
+	book.ID = newBookId
+	models.DB = append(models.DB, book)
+
+	writer.WriteHeader(http.StatusCreated) // 401 created
+	json.NewEncoder(writer).Encode(book)
 
 }
