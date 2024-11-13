@@ -85,10 +85,17 @@ func UpdateBookById(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	found := models.UpdateBookById(id, userBook)
+	_, found := models.FindBookByID(id)
 	if !found {
 		writer.WriteHeader(http.StatusNotFound) // 404 error
 		message := models.Message{Message: fmt.Sprintf("book with id %v is not exists", id)}
+		json.NewEncoder(writer).Encode(message)
+	}
+
+	ok := models.UpdateBookById(id, userBook)
+	if !ok {
+		writer.WriteHeader(http.StatusNoContent) // 204 error
+		message := models.Message{Message: fmt.Sprintf("do nothing, no content to update book id %v", id)}
 		json.NewEncoder(writer).Encode(message)
 	} else {
 		updatedBook, _ := models.FindBookByID(id)

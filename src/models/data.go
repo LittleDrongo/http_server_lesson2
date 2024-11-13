@@ -66,59 +66,35 @@ func DeleteBookById(id int) (found bool) {
 	return found
 }
 
-// func UpdateBookById(id int, book Book) (found bool) {
-// 	for k, b := range DB {
-// 		if b.ID == id {
-// 			if len(b.Title) > 0 {
-// 				DB[k].Title = book.Title
-// 			}
-
-// 			if len(b.Author.Name) > 0 {
-// 				DB[k].Author.Name = book.Author.Name
-// 			}
-
-// 			if len(b.Author.LastName) > 0 {
-// 				DB[k].Author.LastName = book.Author.LastName
-// 			}
-
-// 			if b.Author.BornYear > 0 {
-// 				DB[k].Author.BornYear = book.Author.BornYear
-// 			}
-
-// 			if b.YearPublished > 0 {
-// 				DB[k].YearPublished = book.YearPublished
-// 			}
-// 			found = true
-// 		}
-// 	}
-// 	return found
-// }
-
-func UpdateBookById(id int, book Book) (found bool) {
+func UpdateBookById(id int, book Book) (changed bool) {
 	for k, b := range DB {
 		if b.ID == id {
 			if len(book.Title) > 0 {
 				DB[k].Title = book.Title
+				changed = true
 			}
 
 			if len(book.Author.Name) > 0 {
 				DB[k].Author.Name = book.Author.Name
+				changed = true
 			}
 
 			if len(book.Author.LastName) > 0 {
 				DB[k].Author.LastName = book.Author.LastName
+				changed = true
 			}
 
 			if book.Author.BornYear > 0 {
 				DB[k].Author.BornYear = book.Author.BornYear
+				changed = true
 			}
 
 			if book.YearPublished > 0 {
 				DB[k].YearPublished = book.YearPublished
+				changed = true
 			}
-			found = true
 			break
 		}
 	}
-	return found
+	return changed
 }
